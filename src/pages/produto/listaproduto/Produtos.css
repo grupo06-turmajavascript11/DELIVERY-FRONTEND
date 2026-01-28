@@ -1,0 +1,151 @@
+
+/* Container Principal */
+.container-produtos {
+  padding: 40px;
+  max-width: 1200px;
+  margin: 0 auto;
+  font-family: 'Inter', sans-serif;
+}
+
+/* Cabeçalho (Título e Botão Novo) */
+.header-crud {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 40px;
+  border-bottom: 2px solid #e2e8f0;
+  padding-bottom: 20px;
+}
+
+.header-crud h1 {
+  color: #36073D; /* Roxo Escuro */
+  margin: 0;
+  font-size: 2rem;
+}
+
+.btn-novo {
+  background-color: #0A7334; /* Verde Principal */
+  color: white !important;   /* Força o texto branco */
+  padding: 12px 24px;
+  border-radius: 8px;
+  text-decoration: none;
+  font-weight: bold;
+  display: inline-flex;      /* Importante para alinhar ícone */
+  align-items: center;
+  gap: 8px;
+  box-shadow: 0 4px 6px rgba(10, 115, 52, 0.2);
+  transition: transform 0.2s;
+}
+
+.btn-novo:hover {
+  transform: translateY(-2px);
+  background-color: #085e2b;
+}
+
+/* Grid (Faz ficar um ao lado do outro) */
+.grid-produtos {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); /* Colunas automáticas */
+  gap: 24px;
+}
+
+/* O Card do Produto */
+.card-produto {
+  background: white;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+  transition: all 0.2s;
+  position: relative;
+  overflow: hidden;
+}
+
+.card-produto:hover {
+  border-color: #FCBB14; /* Borda Amarela no hover */
+  transform: translateY(-5px);
+  box-shadow: 0 10px 15px rgba(0,0,0,0.1);
+}
+
+/* Detalhe colorido no topo do card */
+.card-produto::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 5px;
+  background: linear-gradient(90deg, #0A7334, #FCBB14);
+}
+
+.card-topo {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.categoria-badge {
+  background-color: #fef9c3;
+  color: #854d0e;
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: bold;
+}
+
+.card-produto h3 {
+  color: #36073D;
+  font-size: 1.4rem;
+  margin: 10px 0;
+}
+
+.descricao {
+  color: #64748b;
+  margin-bottom: 20px;
+  line-height: 1.5;
+}
+
+.preco {
+  color: #0A7334;
+  font-size: 1.8rem;
+  font-weight: 800;
+  margin-bottom: 20px;
+}
+
+/* Botões de Ação (Editar/Deletar) */
+.card-acoes {
+  display: flex;
+  gap: 10px;
+  margin-top: auto; /* Empurra botões para o final */
+}
+
+.btn-acao {
+  flex: 1;
+  padding: 10px;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+  display: flex; /* Arruma o alinhamento interno */
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-weight: 600;
+  text-decoration: none; /* Tira o sublinhado de link */
+  color: white !important;
+  transition: opacity 0.2s;
+}
+
+.btn-editar {
+  background-color: #592673; /* Roxo Claro */
+}
+
+.btn-deletar {
+  background-color: #D9224A; /* Rosa/Vermelho */
+}
+
+.btn-acao:hover {
+  opacity: 0.9;
+}

@@ -1,35 +1,25 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { BrowserRouter, Routes, Route } from 'react-router-dom';1
+import { Login } from './pages/login/Login';
+import { ListaProdutos } from './pages/produto/listaproduto/ListaProdutos';
+import { DeletarProduto } from './pages/produto/deletarproduto/DeletarProduto';
+import { FormProduto } from './pages/produto/formproduto/FormProduto'; 
+import './App.css';
 
 function App() {
-  const [count, setCount] = useState(0)
-
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    <BrowserRouter>
+      <Routes>
+        {/* Rota inicial: Tela de Login */}
+        <Route path="/" element={<Login />} />
+
+        {/* Rotas do CRUD de Produtos */}
+        <Route path="/produtos" element={<ListaProdutos />} />
+        <Route path="/cadastrar-produto" element={<FormProduto />} />
+        <Route path="/editar/:id" element={<FormProduto />} />
+        <Route path="/deletar/:id" element={<DeletarProduto />} />
+      </Routes>
+    </BrowserRouter>
+  );
 }
 
-export default App
+export default App;

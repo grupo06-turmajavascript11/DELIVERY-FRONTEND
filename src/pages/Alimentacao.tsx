@@ -62,7 +62,7 @@ export default function Cardapio() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 pb-12 font-sans">
+    <div className="min-h-screen bg-gray-50 pb-12 font-sans pt-30">
       {/* Header Personalizado */}
       <div className="w-full py-12 text-white text-center shadow-md bg-[#0A7334]">
         <h1 className="text-3xl md:text-4xl font-bold mb-2">Nosso Cardápio</h1>

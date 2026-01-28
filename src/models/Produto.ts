@@ -1,5 +1,6 @@
-import type { Categoria } from "./Categoria";
-import type { Usuario } from "./Usuario";
+import type { Categoria } from './Categoria'; 
+import type { Empresa } from './Empresa';
+ 
 
 export interface Produto {
   id: number;
@@ -7,6 +8,8 @@ export interface Produto {
   preco: number;
   ingredientes: string;
   calorias: number;
-  categoria?: Categoria;
-  usuario?: Usuario;
+  descricao: string;
+  foto?: string;
+  categoria?: Categoria | null;
+  empresa?: Empresa | null;
 }

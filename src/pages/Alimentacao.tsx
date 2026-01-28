@@ -1,17 +1,15 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { ShoppingCartIcon, FunnelIcon, FireIcon, SpinnerIcon, XIcon } from '@phosphor-icons/react';
-import { alimentacaoService, categoriaService } from '../../services/Service';
-import type { Produto } from '../../models/Produto';
-import type { Categoria } from '../../models/Categoria';
+import { alimentacaoService, categoriaService } from '../services/Service';
+import type { Produto } from '../models/Produto';
+import type { Categoria } from '../models/Categoria';
 
-
-export default function GlobalProducts() {
+export default function Cardapio() {
   const [produtos, setProdutos] = useState<Produto[]>([]);
   const [categorias, setCategorias] = useState<Categoria[]>([]);
   const [loading, setLoading] = useState(true);
   const [selectedCategoria, setSelectedCategoria] = useState<number | null>(null);
-  
   
   const [produtoSelecionado, setProdutoSelecionado] = useState<Produto | null>(null);
   const [modalOpen, setModalOpen] = useState(false);
@@ -35,7 +33,7 @@ export default function GlobalProducts() {
 
       } catch (error) {
         console.error('Erro ao carregar dados', error);
-        alert('Erro ao carregar cardápio. Verifique o console.');
+        // Em produção, use um Toast aqui em vez de alert
       } finally {
         setLoading(false);
       }
@@ -64,9 +62,9 @@ export default function GlobalProducts() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 pb-12">
+    <div className="min-h-screen bg-gray-50 pb-12 font-sans">
       {/* Header Personalizado */}
-      <div className="w-full py-12 text-white text-center shadow-md" style={{ backgroundColor: '#0A7334' }}>
+      <div className="w-full py-12 text-white text-center shadow-md bg-[#0A7334]">
         <h1 className="text-3xl md:text-4xl font-bold mb-2">Nosso Cardápio</h1>
         <p className="opacity-90 text-lg">Saúde e sabor em cada detalhe.</p>
       </div>
@@ -110,10 +108,10 @@ export default function GlobalProducts() {
         {/* Grid de Produtos */}
         {!loading && (
           filteredProdutos.length === 0 ? (
-            <div className="text-center py-16 bg-white rounded-lg shadow-sm">
+            <div className="text-center py-16 bg-white rounded-lg shadow-sm border border-gray-100">
               <FunnelIcon className="mx-auto text-gray-300 mb-4" size={48} />
               <h3 className="text-xl text-gray-600 font-semibold">Nenhum prato encontrado nesta categoria.</h3>
-              <button onClick={() => setSelectedCategoria(null)} className="text-[#0A7334] underline mt-2">
+              <button onClick={() => setSelectedCategoria(null)} className="text-[#0A7334] underline mt-2 hover:text-[#085e2b]">
                 Ver todos os pratos
               </button>
             </div>
@@ -122,14 +120,14 @@ export default function GlobalProducts() {
               {filteredProdutos.map((produto) => (
                 <div 
                   key={produto.id}
-                  className="bg-white rounded-xl shadow-sm hover:shadow-lg transition-shadow border border-gray-100 overflow-hidden flex flex-col h-full"
+                  className="bg-white rounded-xl shadow-sm hover:shadow-lg transition-all duration-300 hover:-translate-y-1 border border-gray-100 overflow-hidden flex flex-col h-full group"
                 >
                   {/* Imagem Placeholder */}
-                  <div className="h-48 bg-gray-100 relative flex items-center justify-center">
-                    {/* Exemplo: Se tiver foto, use <img src={produto.foto} className="w-full h-full object-cover" /> */}
-                    <div className="text-gray-300 flex flex-col items-center">
+                  <div className="h-48 bg-gray-100 relative flex items-center justify-center overflow-hidden">
+                    {/* Efeito sutil de zoom na imagem/placeholder ao passar o mouse */}
+                    <div className="text-gray-300 flex flex-col items-center group-hover:scale-105 transition-transform duration-500">
                        <ShoppingCartIcon weight="fill" size={48} />
-                       <span className="text-xs mt-2">Imagem do Produto</span>
+                       <span className="text-xs mt-2 font-medium">Imagem do Produto</span>
                     </div>
                     
                     {/* Badge de Categoria */}
@@ -140,7 +138,9 @@ export default function GlobalProducts() {
 
                   <div className="p-5 flex flex-col flex-1">
                     <div className="flex justify-between items-start mb-2">
-                      <h3 className="font-bold text-lg text-gray-800 line-clamp-1" title={produto.nome}>{produto.nome}</h3>
+                      <h3 className="font-bold text-lg text-gray-800 line-clamp-1" title={produto.nome}>
+                        {produto.nome}
+                      </h3>
                       <span className="font-bold text-lg text-[#0A7334] whitespace-nowrap">
                         {formatPrice(produto.preco)}
                       </span>
@@ -157,8 +157,7 @@ export default function GlobalProducts() {
 
                     <button 
                       onClick={() => handleComprarClick(produto)}
-                      className="w-full py-3 rounded-lg font-bold flex items-center justify-center gap-2 transition-transform hover:scale-[1.02] active:scale-[0.98]"
-                      style={{ backgroundColor: '#FCBB14', color: '#36073D' }}
+                      className="w-full py-3 rounded-lg font-bold flex items-center justify-center gap-2 transition-transform hover:scale-[1.02] active:scale-[0.98] shadow-sm bg-[#FCBB14] text-[#36073D]"
                     >
                       <ShoppingCartIcon size={20} weight="bold" />
                       Comprar Agora
@@ -176,7 +175,7 @@ export default function GlobalProducts() {
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
           {/* Overlay Escuro */}
           <div 
-            className="absolute inset-0 bg-black/60 backdrop-blur-sm"
+            className="absolute inset-0 bg-black/60 backdrop-blur-sm transition-opacity"
             onClick={() => setModalOpen(false)}
           ></div>
           
@@ -184,32 +183,31 @@ export default function GlobalProducts() {
           <div className="relative bg-white rounded-2xl p-6 w-full max-w-md shadow-2xl animate-fade-in z-10">
             <button 
               onClick={() => setModalOpen(false)}
-              className="absolute top-4 right-4 text-gray-400 hover:text-gray-600"
+              className="absolute top-4 right-4 text-gray-400 hover:text-gray-600 transition-colors"
             >
               <XIcon size={24} />
             </button>
 
-            <h2 className="text-2xl font-bold mb-4" style={{ color: '#36073D' }}>Confirmar Pedido?</h2>
+            <h2 className="text-2xl font-bold mb-4 text-[#36073D]">Confirmar Pedido?</h2>
             
             <div className="mb-6 text-gray-600">
               <p>Você está prestes a pedir:</p>
-              <div className="mt-2 p-3 bg-gray-50 rounded-lg border border-gray-100 flex justify-between items-center">
-                <span className="font-semibold">{produtoSelecionado.nome}</span>
-                <span className="font-bold text-[#0A7334]">{formatPrice(produtoSelecionado.preco)}</span>
+              <div className="mt-2 p-4 bg-gray-50 rounded-lg border border-gray-100 flex justify-between items-center">
+                <span className="font-semibold text-lg">{produtoSelecionado.nome}</span>
+                <span className="font-bold text-xl text-[#0A7334]">{formatPrice(produtoSelecionado.preco)}</span>
               </div>
             </div>
 
             <div className="flex gap-3">
               <button
                 onClick={() => setModalOpen(false)}
-                className="flex-1 py-3 border border-gray-300 rounded-lg font-semibold text-gray-600 hover:bg-gray-50"
+                className="flex-1 py-3 border border-gray-300 rounded-lg font-semibold text-gray-600 hover:bg-gray-50 transition-colors"
               >
                 Cancelar
               </button>
               <button
                 onClick={handleConfirmarCompra}
-                className="flex-1 py-3 rounded-lg font-bold text-[#36073D] hover:opacity-90"
-                style={{ backgroundColor: '#FCBB14' }}
+                className="flex-1 py-3 rounded-lg font-bold text-[#36073D] hover:opacity-90 transition-opacity bg-[#FCBB14]"
               >
                 Confirmar Fome!
               </button>

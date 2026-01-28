@@ -1,16 +1,20 @@
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import './App.css'
-import GlobalProducts from './pages/produto_cliente/ProdutoCliente'
-import OrderSuccess from './pages/confirmacao/Confirmacao'
+import Cardapio from './pages/Alimentacao'
+import PedidoConcluido from './pages/Confirmacao'
+import Navbar from './components/navbar/Navbar'
+import Footer from './components/footer/Footer'
 
 function App() {
 
   return (
     <BrowserRouter>
+      <Navbar/>
       <Routes>
-        <Route path="/produtos" element={<GlobalProducts />} />
-        <Route path="/pedido-efetuado" element={<OrderSuccess />} />
+        <Route path="/cardapio" element={<Cardapio />} />
+        <Route path="/pedido-efetuado" element={<PedidoConcluido />} />
       </Routes>
+      <Footer/>
     </BrowserRouter>
   )
 }

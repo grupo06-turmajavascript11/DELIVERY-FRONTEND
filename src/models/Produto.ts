@@ -1,5 +1,5 @@
 import type { Categoria } from './Categoria'; 
-import type { Empresa } from './Empresa';
+import type { Usuario } from './Usuario';
  
 
 export interface Produto {
@@ -11,5 +11,5 @@ export interface Produto {
   descricao: string;
   foto?: string;
   categoria?: Categoria | null;
-  empresa?: Empresa | null;
+  usuario?: Usuario | null;
 }

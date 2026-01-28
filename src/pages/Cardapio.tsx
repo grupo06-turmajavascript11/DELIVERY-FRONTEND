@@ -53,7 +53,7 @@ export default function Cardapio() {
 
   const handleConfirmarCompra = () => {
     if (produtoSelecionado) {
-      navigate('/pedido-efetuado', { state: { produto: produtoSelecionado } });
+      navigate('/pedido-confirmado', { state: { produto: produtoSelecionado } });
     }
   };
 
@@ -62,7 +62,7 @@ export default function Cardapio() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 pb-12 font-sans pt-30">
+    <div className="min-h-screen bg-gray-50 pb-12 font-sans pt-15">
       {/* Header Personalizado */}
       <div className="w-full py-12 text-white text-center shadow-md bg-[#0A7334]">
         <h1 className="text-3xl md:text-4xl font-bold mb-2">Nosso Cardápio</h1>

@@ -5,10 +5,10 @@ import leveEBemLogo from "../../assets/images/leveebemLogo.png";
 
 // Lista de Links de Navegação
 const navLinks = [
-  { path: '/home', label: 'Home', icon: HouseIcon },
+  { path: '/', label: 'Home', icon: HouseIcon },
   { path: '/categorias', label: 'Categorias', icon: TagIcon },
-  { path: '/produtos', label: 'Produtos', icon: CarrotIcon },
-  { path: '/Entrar/Cadastrar', label: 'Entrar / Cadastrar', icon: UserIcon },
+  { path: '/cardapio', label: 'Cardápio', icon: CarrotIcon },
+  { path: '/login', label: 'Login', icon: UserIcon },
 ];
 
 export function Navbar() {

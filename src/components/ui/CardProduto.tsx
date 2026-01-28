@@ -1,6 +1,6 @@
-import { PencilSimple, Trash } from '@phosphor-icons/react';
+import { PencilSimpleIcon, TrashIcon } from '@phosphor-icons/react';
 import { Link } from 'react-router-dom';
-import type { Produto } from '../../../models/Produto';
+import type { Produto } from '../../models/Produto';
 
 interface CardProps {
   produto: Produto;
@@ -26,7 +26,7 @@ export function CardProduto({ produto }: CardProps) {
           to={`/editar/${produto.id}`} 
           className="flex-1 bg-gray-100 text-[#592673] p-2 rounded flex justify-center items-center gap-2 hover:bg-gray-200 transition-colors font-medium"
         >
-          <PencilSimple size={16} weight="bold" /> Editar
+          <PencilSimpleIcon size={16} weight="bold" /> Editar
         </Link>
         
         {/* Botão Deletar - Fundo Destaque/Vermelho (#D9224A) */}
@@ -34,7 +34,7 @@ export function CardProduto({ produto }: CardProps) {
           to={`/deletar/${produto.id}`} 
           className="flex-1 text-white p-2 rounded flex justify-center items-center gap-2 hover:opacity-90 transition-opacity bg-[#D9224A] font-medium"
         >
-          <Trash size={16} weight="bold" /> Deletar
+          <TrashIcon size={16} weight="bold" /> Deletar
         </Link>
       </div>
     </div>

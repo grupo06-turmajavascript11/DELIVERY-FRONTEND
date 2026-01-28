@@ -4,7 +4,7 @@ import { CheckCircleIcon, PlusCircleIcon, HouseIcon, SpinnerIcon } from '@phosph
 import { alimentacaoService } from '../services/Service';
 import type { Produto } from '../models/Produto';
 
-export default function PedidoConcluido() {
+export default function PedidoConfirmado() {
   const location = useLocation();
   const produtoComprado = location.state?.produto as Produto | undefined;
   

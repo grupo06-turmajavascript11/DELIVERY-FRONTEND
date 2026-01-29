@@ -9,7 +9,7 @@ export function Login() {
   const handleLogin = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (dados.usuario && dados.senha) {
-      navigate('/produtos');
+      navigate('/admin/produtos');
     } else {
       alert('Preencha os campos!');
     }
@@ -24,7 +24,7 @@ export function Login() {
         
         {/* Título */}
         <h1 className="text-[#36073D] text-4xl font-bold mb-1">
-          Leve<span className="text-[#FCBB14]">Bem</span>
+          <span className='text-[#36073D]'>Leve</span><span className='text-[#FCBB14]'>&</span><span className="text-[#D9224A]">Bem</span>
         </h1>
         <p className="text-[#592673] mb-8 font-medium">Acesso Empresa</p>
 

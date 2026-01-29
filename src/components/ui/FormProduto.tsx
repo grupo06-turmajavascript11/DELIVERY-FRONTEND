@@ -100,7 +100,7 @@ export function FormProduto() {
         await alimentacaoService.create(dadosProduto);
         alert('Produto cadastrado com sucesso!');
       }
-      navigate('/produtos');
+      navigate('/admin/produtos');
     } catch (error) {
       console.error('Erro ao salvar produto', error);
       alert('Erro ao salvar o produto. Verifique os dados.');
@@ -116,7 +116,7 @@ export function FormProduto() {
     <div className="container mx-auto px-4 lg:px-8 py-10 max-w-3xl font-sans mt-20 h-[80vh]">
       
       <button
-        onClick={() => navigate('/produtos')}
+        onClick={() => navigate('/admin/produtos')}
         className="mb-6 text-gray-500 hover:text-[#36073D] flex items-center gap-2 text-sm font-medium transition-colors"
       >
         <ArrowLeftIcon size={18} />
@@ -239,7 +239,7 @@ export function FormProduto() {
           <div className="flex gap-3 pt-4 border-t border-gray-100 mt-6">
             <button
               type="button"
-              onClick={() => navigate('/produtos')}
+              onClick={() => navigate('/admin/produtos')}
               className="flex-1 px-4 py-3 border border-gray-200 text-gray-700 rounded-lg hover:bg-gray-50 font-medium transition-colors disabled:opacity-50"
               disabled={loading}
             >

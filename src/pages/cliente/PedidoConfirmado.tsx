@@ -7,8 +7,8 @@ import {
   SpinnerIcon, 
   CarrotIcon // <--- Adicionei o ícone de cenoura para representar o alimento
 } from '@phosphor-icons/react';
-import { alimentacaoService } from '../services/Service';
-import type { Produto } from '../models/Produto';
+import { alimentacaoService } from '../../services/Service';
+import type { Produto } from '../../models/Produto';
 
 export default function PedidoConfirmado() {
   const location = useLocation();

@@ -55,7 +55,7 @@ export function Produtos() {
   };
 
   return (
-    <div className="container mx-auto px-4 lg:px-8 py-10 max-w-7xl font-sans min-h-screen bg-gray-50 mt-15">
+    <div className="container mx-auto px-4 lg:px-8 py-10 max-w-7xl font-sans min-h-screen mt-15">
       
       {/* Cabeçalho da Página */}
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4 border-b border-gray-200 pb-6">

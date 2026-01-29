@@ -1,6 +1,12 @@
 import { useEffect, useState } from 'react';
 import { useLocation, Link, Navigate } from 'react-router-dom';
-import { CheckCircleIcon, PlusCircleIcon, HouseIcon, SpinnerIcon } from '@phosphor-icons/react';
+import { 
+  CheckCircleIcon, 
+  PlusCircleIcon, 
+  HouseIcon, 
+  SpinnerIcon, 
+  CarrotIcon // <--- Adicionei o ícone de cenoura para representar o alimento
+} from '@phosphor-icons/react';
 import { alimentacaoService } from '../services/Service';
 import type { Produto } from '../models/Produto';
 
@@ -11,10 +17,8 @@ export default function PedidoConfirmado() {
   const [recomendacoes, setRecomendacoes] = useState<Produto[]>([]);
   const [loading, setLoading] = useState(true);
   
-  // Estado para feedback visual do botão "Adicionar"
   const [adicionadoId, setAdicionadoId] = useState<number | null>(null);
 
-  // Redireciona se tentar acessar direto sem comprar nada
   if (!produtoComprado) {
     return <Navigate to="/" replace />;
   }
@@ -52,7 +56,6 @@ export default function PedidoConfirmado() {
         {/* Card de Sucesso */}
         <div className="bg-white rounded-xl shadow-lg border-t-8 border-[#0A7334] mb-12 overflow-hidden animate-fade-in">
           <div className="p-8 md:p-12 text-center">
-            {/* Ícone de Sucesso com fundo sutil */}
             <div className="w-24 h-24 bg-[#0A7334]/10 rounded-full flex items-center justify-center mx-auto mb-6">
               <CheckCircleIcon size={64} className="text-[#0A7334]" weight="fill" />
             </div>
@@ -90,9 +93,9 @@ export default function PedidoConfirmado() {
                   key={item.id}
                   className="bg-white border border-gray-100 rounded-xl p-4 shadow-sm hover:shadow-md hover:-translate-y-1 transition-all flex flex-col h-full"
                 >
-                  {/* Imagem Placeholder */}
-                  <div className="h-32 bg-gray-100 rounded-lg mb-4 flex items-center justify-center text-gray-300">
-                    <span className="text-xs font-medium">Foto do Produto</span>
+                  {/* SUBSTITUÍDO: Placeholder de texto por Ícone Visual */}
+                  <div className="h-32 bg-[#0A7334]/10 rounded-lg mb-4 flex items-center justify-center">
+                    <CarrotIcon size={48} className="text-[#0A7334] opacity-80" weight="fill" />
                   </div>
                   
                   <h3 className="font-bold text-gray-800 mb-1 line-clamp-1">{item.nome}</h3>
@@ -131,7 +134,7 @@ export default function PedidoConfirmado() {
         {/* Botão Voltar */}
         <div className="text-center">
           <Link 
-            to="/cardapio" // Ajustei para voltar ao Cardápio/Vitrine, que faz mais sentido no fluxo
+            to="/cardapio" 
             className="inline-flex items-center px-8 py-3 rounded-lg font-bold text-white shadow-md hover:opacity-90 hover:shadow-lg transition-all bg-[#0A7334]"
           >
             <HouseIcon className="mr-2" size={20} weight="fill" />

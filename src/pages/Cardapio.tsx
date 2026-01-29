@@ -1,9 +1,62 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
-import { ShoppingCartIcon, FunnelIcon, FireIcon, SpinnerIcon, XIcon } from '@phosphor-icons/react';
+import { 
+  ShoppingCartIcon, 
+  FunnelIcon, 
+  FireIcon, 
+  CarrotIcon, 
+  CurrencyDollarIcon, 
+  XIcon as X, 
+  CheckCircleIcon, 
+  SpinnerIcon 
+} from '@phosphor-icons/react';
 import { alimentacaoService, categoriaService } from '../services/Service';
 import type { Produto } from '../models/Produto';
 import type { Categoria } from '../models/Categoria';
+
+// --- Componentes Visuais Simplificados (Simulando a lib UI) ---
+
+const Badge = ({ children, className = "" }: { children: React.ReactNode, className?: string }) => (
+  <span className={`inline-flex items-center rounded-full border border-transparent px-2.5 py-0.5 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 ${className}`}>
+    {children}
+  </span>
+);
+
+const Button = ({ 
+  children, 
+  onClick, 
+  variant = 'default', 
+  className = "", 
+  disabled = false 
+}: { 
+  children: React.ReactNode, 
+  onClick?: () => void, 
+  variant?: 'default' | 'outline' | 'ghost' | 'secondary' | 'destructive', 
+  className?: string,
+  disabled?: boolean
+}) => {
+  const baseStyles = "inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 h-10 px-4 py-2";
+  
+  const variants = {
+    default: "bg-[#0A7334] text-white hover:bg-[#0A7334]/90",
+    secondary: "bg-[#FCBB14] text-[#36073D] hover:bg-[#FCBB14]/80",
+    destructive: "bg-red-500 text-white hover:bg-red-500/90",
+    outline: "border border-gray-200 bg-white hover:bg-gray-100 text-gray-900",
+    ghost: "hover:bg-gray-100 text-gray-700"
+  };
+
+  return (
+    <button 
+      onClick={onClick} 
+      disabled={disabled}
+      className={`${baseStyles} ${variants[variant]} ${className}`}
+    >
+      {children}
+    </button>
+  );
+};
+
+// --- Página Principal ---
 
 export default function Cardapio() {
   const [produtos, setProdutos] = useState<Produto[]>([]);
@@ -11,6 +64,7 @@ export default function Cardapio() {
   const [loading, setLoading] = useState(true);
   const [selectedCategoria, setSelectedCategoria] = useState<number | null>(null);
   
+  // Estado para o Modal/Drawer customizado
   const [produtoSelecionado, setProdutoSelecionado] = useState<Produto | null>(null);
   const [modalOpen, setModalOpen] = useState(false);
   
@@ -21,6 +75,9 @@ export default function Cardapio() {
     const fetchData = async () => {
       try {
         setLoading(true);
+        // Simulando delay para ver o skeleton/loading se quiser
+        // await new Promise(resolve => setTimeout(resolve, 1000)); 
+        
         const [prodResponse, catResponse] = await Promise.all([
           alimentacaoService.getAll(),
           categoriaService.getAll()
@@ -33,7 +90,6 @@ export default function Cardapio() {
 
       } catch (error) {
         console.error('Erro ao carregar dados', error);
-        // Em produção, use um Toast aqui em vez de alert
       } finally {
         setLoading(false);
       }
@@ -53,6 +109,7 @@ export default function Cardapio() {
 
   const handleConfirmarCompra = () => {
     if (produtoSelecionado) {
+      setModalOpen(false);
       navigate('/pedido-confirmado', { state: { produto: produtoSelecionado } });
     }
   };
@@ -62,155 +119,163 @@ export default function Cardapio() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 pb-12 font-sans pt-15">
-      {/* Header Personalizado */}
-      <div className="w-full py-12 text-white text-center shadow-md bg-[#0A7334]">
-        <h1 className="text-3xl md:text-4xl font-bold mb-2">Nosso Cardápio</h1>
-        <p className="opacity-90 text-lg">Saúde e sabor em cada detalhe.</p>
+    <div className="container mx-auto px-4 lg:px-8 py-10 min-h-screen font-sans">
+      {/* Barra de Filtros */}
+      <div className="flex flex-wrap gap-2 mb-8 animate-fade-in">
+        <Button 
+          variant={selectedCategoria === null ? "default" : "outline"}
+          onClick={() => setSelectedCategoria(null)}
+          className="rounded-full shadow-sm"
+        >
+          <FunnelIcon className="w-4 h-4 mr-2" weight="fill" />
+          Todos
+        </Button>
+        
+        {categorias.map(cat => (
+          <Button
+            key={cat.id}
+            variant={selectedCategoria === cat.id ? "default" : "outline"}
+            onClick={() => setSelectedCategoria(cat.id)}
+            className="rounded-full shadow-sm"
+          >
+            {cat.descricao}
+          </Button>
+        ))}
       </div>
 
-      <div className="container mx-auto px-4 mt-8">
-        {/* Barra de Filtros */}
-        <div className="flex flex-wrap gap-3 mb-8 justify-center">
-          <button 
-            onClick={() => setSelectedCategoria(null)}
-            className={`px-4 py-2 rounded-full font-medium transition-colors ${
-              selectedCategoria === null 
-                ? 'bg-[#0A7334] text-white' 
-                : 'bg-white text-gray-600 border border-gray-200 hover:bg-gray-100'
-            }`}
-          >
-            Todos
-          </button>
-          {categorias.map(cat => (
-            <button
-              key={cat.id}
-              onClick={() => setSelectedCategoria(cat.id)}
-              className={`px-4 py-2 rounded-full font-medium transition-colors ${
-                selectedCategoria === cat.id 
-                  ? 'bg-[#0A7334] text-white' 
-                  : 'bg-white text-gray-600 border border-gray-200 hover:bg-gray-100'
-              }`}
-            >
-              {cat.descricao}
-            </button>
-          ))}
+      {/* Loading State Customizado */}
+      {loading ? (
+        <div className="flex flex-col items-center justify-center py-20">
+          <SpinnerIcon className="w-10 h-10 text-[#0A7334] animate-spin" />
+          <p className="text-gray-500 mt-4 text-sm font-medium">Carregando delícias...</p>
         </div>
-
-        {/* Loading State */}
-        {loading && (
-          <div className="flex flex-col items-center justify-center py-20">
-            <SpinnerIcon className="animate-spin text-[#0A7334]" size={40} />
-            <p className="text-gray-500 mt-4">Carregando delícias...</p>
+      ) : filteredProdutos.length === 0 ? (
+        /* Empty State */
+        <div className="flex flex-col items-center justify-center py-16 px-4 text-center bg-white rounded-2xl border border-gray-100 shadow-sm">
+          <div className="w-20 h-20 rounded-full bg-gray-100 flex items-center justify-center mb-6">
+            <FunnelIcon className="w-10 h-10 text-gray-400" />
           </div>
-        )}
+          <h3 className="text-xl font-semibold text-gray-900 mb-2">Nenhum prato encontrado</h3>
+          <p className="text-gray-500 max-w-md mb-6">Não encontramos itens nesta categoria no momento.</p>
+          <Button variant="outline" onClick={() => setSelectedCategoria(null)}>
+            Ver todos os pratos
+          </Button>
+        </div>
+      ) : (
+        /* Grid de Produtos */
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+          {filteredProdutos.map((produto, index) => (
+            <div 
+              key={produto.id}
+              className="group flex flex-col bg-white rounded-2xl border border-gray-100 shadow-sm hover:shadow-lg transition-all duration-300 overflow-hidden h-full"
+              style={{ animationDelay: `${index * 0.05}s` }}
+            >
+              {/* Header do Card (Imagem Placeholder) */}
+              <div className="h-48 bg-linear-to-br from-[#0A7334] to-[#FCBB14] relative flex items-center justify-center overflow-hidden">
+                <div className="text-white/30 flex flex-col items-center group-hover:scale-110 transition-transform duration-500">
+                   <CarrotIcon weight="fill" size={64} />
+                </div>
+                
+                {/* Badge de Categoria */}
+                <Badge className="absolute top-4 right-4 bg-white/90 text-[#36073D] backdrop-blur-sm shadow-sm">
+                  {produto.categoria?.descricao || 'Geral'}
+                </Badge>
+              </div>
 
-        {/* Grid de Produtos */}
-        {!loading && (
-          filteredProdutos.length === 0 ? (
-            <div className="text-center py-16 bg-white rounded-lg shadow-sm border border-gray-100">
-              <FunnelIcon className="mx-auto text-gray-300 mb-4" size={48} />
-              <h3 className="text-xl text-gray-600 font-semibold">Nenhum prato encontrado nesta categoria.</h3>
-              <button onClick={() => setSelectedCategoria(null)} className="text-[#0A7334] underline mt-2 hover:text-[#085e2b]">
-                Ver todos os pratos
-              </button>
-            </div>
-          ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-              {filteredProdutos.map((produto) => (
-                <div 
-                  key={produto.id}
-                  className="bg-white rounded-xl shadow-sm hover:shadow-lg transition-all duration-300 hover:-translate-y-1 border border-gray-100 overflow-hidden flex flex-col h-full group"
-                >
-                  {/* Imagem Placeholder */}
-                  <div className="h-48 bg-gray-100 relative flex items-center justify-center overflow-hidden">
-                    {/* Efeito sutil de zoom na imagem/placeholder ao passar o mouse */}
-                    <div className="text-gray-300 flex flex-col items-center group-hover:scale-105 transition-transform duration-500">
-                       <ShoppingCartIcon weight="fill" size={48} />
-                       <span className="text-xs mt-2 font-medium">Imagem do Produto</span>
-                    </div>
-                    
-                    {/* Badge de Categoria */}
-                    <span className="absolute top-3 right-3 bg-white/90 text-[#0A7334] text-xs font-bold px-2 py-1 rounded shadow-sm">
-                      {produto.categoria?.descricao}
-                    </span>
+              {/* Conteúdo do Card */}
+              <div className="p-6 flex flex-col flex-1">
+                <h3 className="text-xl font-bold text-[#36073D] mb-2 line-clamp-1" title={produto.nome}>
+                  {produto.nome}
+                </h3>
+                
+                <p className="text-gray-500 text-sm line-clamp-2 mb-4 flex-1 leading-relaxed">
+                  {produto.ingredientes}
+                </p>
+
+                <div className="flex items-center gap-4 mb-6">
+                  <div className="flex items-center gap-1 text-[#0A7334] font-bold text-lg">
+                    <CurrencyDollarIcon className="w-5 h-5" weight="bold" />
+                    {formatPrice(produto.preco)}
                   </div>
-
-                  <div className="p-5 flex flex-col flex-1">
-                    <div className="flex justify-between items-start mb-2">
-                      <h3 className="font-bold text-lg text-gray-800 line-clamp-1" title={produto.nome}>
-                        {produto.nome}
-                      </h3>
-                      <span className="font-bold text-lg text-[#0A7334] whitespace-nowrap">
-                        {formatPrice(produto.preco)}
-                      </span>
-                    </div>
-                    
-                    <p className="text-gray-500 text-sm line-clamp-2 mb-4 flex-1">
-                      {produto.ingredientes}
-                    </p>
-
-                    <div className="flex items-center gap-2 text-xs text-gray-400 mb-4">
-                      <FireIcon size={16} className="text-orange-500" weight="fill" />
-                      {produto.calorias} kcal
-                    </div>
-
-                    <button 
-                      onClick={() => handleComprarClick(produto)}
-                      className="w-full py-3 rounded-lg font-bold flex items-center justify-center gap-2 transition-transform hover:scale-[1.02] active:scale-[0.98] shadow-sm bg-[#FCBB14] text-[#36073D]"
-                    >
-                      <ShoppingCartIcon size={20} weight="bold" />
-                      Comprar Agora
-                    </button>
+                  
+                  <div className="flex items-center gap-1 text-gray-400 text-sm font-medium">
+                    <FireIcon className="w-4 h-4 text-orange-500" weight="fill" />
+                    {produto.calorias} kcal
                   </div>
                 </div>
-              ))}
-            </div>
-          )
-        )}
-      </div>
 
-      {/* MODAL MANUAL DE CONFIRMAÇÃO */}
+                <Button 
+                  onClick={() => handleComprarClick(produto)}
+                  variant="secondary"
+                  className="w-full font-bold shadow-sm transition-transform active:scale-95"
+                >
+                  <ShoppingCartIcon className="w-5 h-5 mr-2" weight="fill" />
+                  Comprar Agora
+                </Button>
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+
+      {/* Modal Customizado (Substituindo Drawer/Dialog complexo) */}
       {modalOpen && produtoSelecionado && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-          {/* Overlay Escuro */}
+          {/* Overlay (Fundo escuro com blur) */}
           <div 
-            className="absolute inset-0 bg-black/60 backdrop-blur-sm transition-opacity"
+            className="absolute inset-0 bg-black/60 backdrop-blur-sm transition-opacity animate-in fade-in duration-300"
             onClick={() => setModalOpen(false)}
           ></div>
           
           {/* Conteúdo do Modal */}
-          <div className="relative bg-white rounded-2xl p-6 w-full max-w-md shadow-2xl animate-fade-in z-10">
-            <button 
-              onClick={() => setModalOpen(false)}
-              className="absolute top-4 right-4 text-gray-400 hover:text-gray-600 transition-colors"
-            >
-              <XIcon size={24} />
-            </button>
-
-            <h2 className="text-2xl font-bold mb-4 text-[#36073D]">Confirmar Pedido?</h2>
+          <div className="relative bg-white rounded-2xl w-full max-w-md shadow-2xl animate-in zoom-in-95 duration-300 overflow-hidden flex flex-col max-h-[90vh]">
             
-            <div className="mb-6 text-gray-600">
-              <p>Você está prestes a pedir:</p>
-              <div className="mt-2 p-4 bg-gray-50 rounded-lg border border-gray-100 flex justify-between items-center">
-                <span className="font-semibold text-lg">{produtoSelecionado.nome}</span>
-                <span className="font-bold text-xl text-[#0A7334]">{formatPrice(produtoSelecionado.preco)}</span>
-              </div>
+            {/* Header do Modal */}
+            <div className="px-6 py-4 border-b border-gray-100 bg-gray-50/50 flex items-center justify-between">
+              <h2 className="text-xl font-bold text-[#36073D] flex items-center gap-2">
+                <CheckCircleIcon className="w-6 h-6 text-[#0A7334]" weight="fill"/>
+                Confirmar Pedido?
+              </h2>
+              <button 
+                onClick={() => setModalOpen(false)}
+                className="text-gray-400 hover:text-gray-600 p-1 rounded-md hover:bg-gray-100 transition-colors"
+              >
+                <X size={20} />
+              </button>
             </div>
 
-            <div className="flex gap-3">
-              <button
-                onClick={() => setModalOpen(false)}
-                className="flex-1 py-3 border border-gray-300 rounded-lg font-semibold text-gray-600 hover:bg-gray-50 transition-colors"
-              >
-                Cancelar
-              </button>
-              <button
-                onClick={handleConfirmarCompra}
-                className="flex-1 py-3 rounded-lg font-bold text-[#36073D] hover:opacity-90 transition-opacity bg-[#FCBB14]"
-              >
-                Confirmar Fome!
-              </button>
+            {/* Corpo do Modal */}
+            <div className="p-6">
+              <p className="text-gray-500 mb-4">
+                Você está prestes a adicionar o seguinte item ao seu pedido:
+              </p>
+              
+              <div className="flex items-center justify-between p-4 rounded-xl bg-gray-50 border border-gray-100 mb-6">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-full bg-[#0A7334]/10 flex items-center justify-center text-[#0A7334]">
+                    <CarrotIcon weight="fill" size={20} />
+                  </div>
+                  <span className="font-semibold text-lg text-gray-800">{produtoSelecionado.nome}</span>
+                </div>
+                <span className="font-bold text-xl text-[#0A7334]">{formatPrice(produtoSelecionado.preco)}</span>
+              </div>
+              
+              <div className="flex flex-col gap-3">
+                <Button 
+                  onClick={handleConfirmarCompra}
+                  variant="secondary"
+                  className="w-full h-12 text-lg font-bold"
+                >
+                  Confirmar Fome!
+                </Button>
+                <Button 
+                  onClick={() => setModalOpen(false)}
+                  variant="outline"
+                  className="w-full"
+                >
+                  Cancelar
+                </Button>
+              </div>
             </div>
           </div>
         </div>
